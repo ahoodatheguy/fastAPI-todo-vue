@@ -21,7 +21,7 @@ class DataBase:
 			)
 		return tasks
 
-	def get_task(self, task_id: int):
+	def get_task(self, task_id: int) -> dict:
 		self.curs.execute('SELECT * FROM TASKS WHERE id=?', (str(task_id)))
 		result = self.curs.fetchone()
 		serialized_result = {
@@ -30,3 +30,8 @@ class DataBase:
 			'desc': result[2]
 		}
 		return serialized_result
+
+	def delete_task(self, task_id: int) -> dict:
+		self.curs.execute('DELETE FROM TASKS WHERE id=?', (str(task_id)))
+		self.conn.commit()
+		return self.all_tasks()

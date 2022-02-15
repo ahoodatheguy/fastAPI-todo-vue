@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pkg_resources import ResolutionError
 from serializers import SQL
 
 app = FastAPI()
@@ -15,3 +16,10 @@ def task_index():
 def get_task(task_id: int):
 	'''Return data about a specific task'''
 	return database.get_task(task_id=task_id)
+
+
+@app.get('/delete/{task_id}')
+def delete_task(task_id: int):
+	'''Delete specific task *(irreversible!)*'''
+	database.delete_task(task_id=task_id)
+	return database.all_tasks()
