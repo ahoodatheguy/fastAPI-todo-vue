@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from pkg_resources import ResolutionError
-from serializers import SQL
+from serializers import SQL, post_bodies
+import json
 
 app = FastAPI()
 database = SQL.DataBase('tasks.sqlite3')
@@ -18,8 +18,15 @@ def get_task(task_id: int):
 	return database.get_task(task_id=task_id)
 
 
-@app.get('/delete/{task_id}')
+@app.delete('/delete/{task_id}')
 def delete_task(task_id: int):
 	'''Delete specific task *(irreversible!)*'''
 	database.delete_task(task_id=task_id)
 	return database.all_tasks()
+
+
+@app.post('/create-task')
+def create_task(task: post_bodies.NewTask):
+	'''Convert POST data into a new task'''
+	json_tasks = json.loads(task.json())
+	return database.create_task(task_data=json_tasks)

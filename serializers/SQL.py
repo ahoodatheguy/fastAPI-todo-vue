@@ -1,6 +1,8 @@
 """Manage data coming from SQL database."""
 import sqlite3
 
+from anyio import TASK_STATUS_IGNORED
+
 
 class DataBase:
 	def __init__(self, DATABASE_URL) -> None:
@@ -35,3 +37,9 @@ class DataBase:
 		self.curs.execute('DELETE FROM TASKS WHERE id=?', (str(task_id)))
 		self.conn.commit()
 		return self.all_tasks()
+
+	def create_task(self, task_data: dict) -> dict:
+		self.curs.execute(
+			'INSERT INTO tasks (name, desc) VALUES (?, ?);', (task_data['name'], task_data['desc']))
+		self.conn.commit()
+		return task_data
