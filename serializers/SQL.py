@@ -20,3 +20,13 @@ class DataBase:
 				}
 			)
 		return tasks
+
+	def get_task(self, task_id: int):
+		self.curs.execute('SELECT * FROM TASKS WHERE id=?', (str(task_id)))
+		result = self.curs.fetchone()
+		serialized_result = {
+			'id': result[0],
+			'name': result[1],
+			'desc': result[2]
+		}
+		return serialized_result
