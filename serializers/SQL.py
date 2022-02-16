@@ -43,3 +43,12 @@ class DataBase:
 			'INSERT INTO tasks (name, desc) VALUES (?, ?);', (task_data['name'], task_data['desc']))
 		self.conn.commit()
 		return task_data
+
+	def edit_task(self, task_id: int, task_data: dict) -> dict:
+		self.curs.execute(
+			'''UPDATE tasks
+				SET name = ?, desc = ?
+					WHERE id=?''', (task_data['name'], task_data['desc'], task_id)
+		)
+		self.conn.commit()
+		return task_data

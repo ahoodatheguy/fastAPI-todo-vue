@@ -30,3 +30,10 @@ def create_task(task: post_bodies.NewTask):
 	'''Convert POST data into a new task'''
 	json_tasks = json.loads(task.json())
 	return database.create_task(task_data=json_tasks)
+
+
+@app.put('/edit-task/{task_id}')
+def edit_task(task_id: int, task: post_bodies.NewTask):
+	'''Edit the data of a specific task.'''
+	task_data = json.loads(task.json())
+	return database.edit_task(task_id=task_id, task_data=task_data)
