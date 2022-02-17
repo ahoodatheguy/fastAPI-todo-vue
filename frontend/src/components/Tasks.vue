@@ -1,9 +1,8 @@
 <template>
 	<div class="task-container">
-		<Task
-			taskName="Task One"
-			taskDesc="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
-		/>
+		<div v-for="task in tasks" :key="task.id">
+			<Task :taskName="task.name" :taskDesc="task.desc" :taskID="task.id" />
+		</div>
 	</div>
 </template>
 
@@ -12,6 +11,21 @@ import Task from "./Task.vue";
 export default {
 	name: "Tasks",
 	components: { Task },
+	data() {
+		return {
+			tasks: {},
+		};
+	},
+	methods: {
+		fetchTasks() {
+			fetch("http://localhost:8000/")
+				.then((response) => response.json())
+				.then((data) => (this.tasks = data));
+		},
+	},
+	created() {
+		this.fetchTasks();
+	},
 };
 </script>
 
