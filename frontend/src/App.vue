@@ -1,7 +1,10 @@
 <template>
 	<div id="app">
 		<Header text="FastAPI TODO App" />
-		<Button text="New Task" :onClick="createTask" />
+		<div id="new-task">
+			<Button v-if="showNew" text="New Task" @click="showNew = !showNew" />
+			<NewTaskForm v-else />
+		</div>
 		<Tasks />
 	</div>
 </template>
@@ -10,6 +13,7 @@
 import Header from "./components/Header.vue";
 import Tasks from "./components/Tasks.vue";
 import Button from "./components/Button.vue";
+import NewTaskForm from "./components/NewTaskForm.vue";
 
 export default {
 	name: "App",
@@ -17,24 +21,10 @@ export default {
 		Header,
 		Tasks,
 		Button,
+		NewTaskForm,
 	},
-	methods: {
-		createTask() {
-			// TODO: Create a component that handles user input, instead of using prompt();
-			let newTask = {
-				name: prompt("Task name"),
-				desc: prompt("Task Description"),
-			};
-			fetch("http://localhost:8000/create-task", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(newTask),
-			});
-			// TODO: Access fetchTasks() from the Tasks component and use it here to avoid reloads.
-			location.reload();
-		},
+	data() {
+		return { showNew: true };
 	},
 };
 </script>
